@@ -314,6 +314,459 @@
     </style>
   </head>
   <body>
+    <div class="styleLoad" style="visibility: hidden">
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>LYNK - Loading</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family:
+            -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, sans-serif;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        body.creepy-mode {
+          background: linear-gradient(135deg, #1a1a1a 0%, #2d1b3d 100%);
+          animation: backgroundPulse 2s infinite;
+        }
+
+        @keyframes backgroundPulse {
+          0%,
+          100% {
+            filter: brightness(1);
+          }
+          50% {
+            filter: brightness(0.7);
+          }
+        }
+
+        .loading-container {
+          text-align: center;
+          z-index: 10;
+        }
+
+        .logo {
+          font-size: 72px;
+          font-weight: 900;
+          color: white;
+          letter-spacing: 8px;
+          margin-bottom: 40px;
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        body.creepy-mode .logo {
+          animation:
+            logoGlitch 0.5s infinite,
+            logoFloat 3s ease-in-out infinite;
+          text-shadow:
+            0 0 10px rgba(255, 0, 0, 0.8),
+            0 0 20px rgba(255, 0, 0, 0.6),
+            0 0 30px rgba(255, 0, 0, 0.4);
+        }
+
+        @keyframes logoFloat {
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        @keyframes logoGlitch {
+          0%,
+          100% {
+            transform: translateY(0px);
+            text-shadow:
+              0 0 10px rgba(255, 0, 0, 0.8),
+              0 0 20px rgba(255, 0, 0, 0.6);
+          }
+          25% {
+            transform: translate(-2px, 2px);
+            text-shadow:
+              2px 0 10px rgba(255, 0, 0, 0.8),
+              -2px 0 20px rgba(0, 255, 255, 0.6);
+          }
+          50% {
+            transform: translate(2px, -2px);
+            text-shadow:
+              -2px 0 10px rgba(0, 255, 255, 0.8),
+              2px 0 20px rgba(255, 0, 0, 0.6);
+          }
+          75% {
+            transform: translate(-2px, -2px);
+          }
+        }
+
+        .tagline {
+          font-size: 18px;
+          color: rgba(255, 255, 255, 0.9);
+          margin-bottom: 50px;
+          font-weight: 300;
+          letter-spacing: 2px;
+        }
+
+        body.creepy-mode .tagline {
+          animation: textFlicker 0.3s infinite;
+        }
+
+        @keyframes textFlicker {
+          0%,
+          100% {
+            opacity: 0.9;
+          }
+          50% {
+            opacity: 0.4;
+          }
+        }
+
+        .spinner-container {
+          position: relative;
+          width: 120px;
+          height: 120px;
+          margin: 0 auto 30px;
+        }
+
+        .spinner {
+          width: 100%;
+          height: 100%;
+          border: 6px solid rgba(255, 255, 255, 0.2);
+          border-top: 6px solid white;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        body.creepy-mode .spinner {
+          border: 6px solid rgba(255, 0, 0, 0.3);
+          border-top: 6px solid #ff0000;
+          animation:
+            spin 1s linear infinite,
+            spinnerPulse 0.5s infinite;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes spinnerPulse {
+          0%,
+          100% {
+            border-top-color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+          }
+          50% {
+            border-top-color: #8b0000;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.8);
+          }
+        }
+
+        .heart-icon {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 48px;
+          animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        body.creepy-mode .heart-icon {
+          animation:
+            heartBeat 1.5s ease-in-out infinite,
+            shadowPulse 1s infinite;
+          filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8));
+        }
+
+        @keyframes heartBeat {
+          0%,
+          100% {
+            transform: translate(-50%, -50%) scale(1);
+          }
+          25% {
+            transform: translate(-50%, -50%) scale(1.1);
+          }
+          50% {
+            transform: translate(-50%, -50%) scale(1);
+          }
+        }
+
+        @keyframes shadowPulse {
+          0%,
+          100% {
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8));
+          }
+          50% {
+            filter: drop-shadow(0 0 20px rgba(255, 0, 0, 1));
+          }
+        }
+
+        .loading-text {
+          font-size: 16px;
+          color: white;
+          font-weight: 400;
+          letter-spacing: 1px;
+        }
+
+        .loading-dots {
+          display: inline-block;
+          width: 30px;
+          text-align: left;
+        }
+
+        .progress-bar {
+          width: 300px;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 10px;
+          margin: 30px auto 20px;
+          overflow: hidden;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: white;
+          border-radius: 10px;
+          animation: progressFill 3s ease-in-out forwards;
+        }
+
+        body.creepy-mode .progress-fill {
+          background: linear-gradient(90deg, #ff0000, #8b0000);
+          animation:
+            progressFill 3s ease-in-out forwards,
+            progressGlow 1s infinite;
+        }
+
+        @keyframes progressFill {
+          0% {
+            width: 0%;
+          }
+          100% {
+            width: 100%;
+          }
+        }
+
+        @keyframes progressGlow {
+          0%,
+          100% {
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+          }
+        }
+
+        .floating-hearts {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .floating-heart {
+          position: absolute;
+          font-size: 24px;
+          opacity: 0;
+          animation: floatUp 4s ease-in infinite;
+        }
+
+        body.creepy-mode .floating-heart {
+          animation: floatUpCreepy 4s ease-in infinite;
+          filter: blur(1px);
+        }
+
+        @keyframes floatUp {
+          0% {
+            opacity: 0;
+            transform: translateY(0) scale(1);
+          }
+          20% {
+            opacity: 0.6;
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-100vh) scale(0.5);
+          }
+        }
+
+        @keyframes floatUpCreepy {
+          0% {
+            opacity: 0;
+            transform: translateY(0) scale(1) rotate(0deg);
+          }
+          20% {
+            opacity: 0.8;
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-100vh) scale(0.5) rotate(360deg);
+            filter: blur(3px);
+          }
+        }
+
+        .toggle-btn {
+          position: fixed;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          color: white;
+          padding: 12px 30px;
+          border-radius: 30px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          z-index: 100;
+        }
+
+        .toggle-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateX(-50%) scale(1.05);
+        }
+
+        body.creepy-mode .toggle-btn {
+          background: rgba(139, 0, 0, 0.3);
+          border-color: rgba(255, 0, 0, 0.5);
+          animation: buttonPulse 2s infinite;
+        }
+
+        @keyframes buttonPulse {
+          0%,
+          100% {
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+          }
+        }
+
+        .shadow-figure {
+          position: fixed;
+          width: 200px;
+          height: 400px;
+          background: rgba(0, 0, 0, 0.8);
+          filter: blur(20px);
+          border-radius: 50%;
+          opacity: 0;
+          pointer-events: none;
+        }
+
+        body.creepy-mode .shadow-figure {
+          animation: shadowAppear 3s ease-in-out infinite;
+        }
+
+        .shadow-figure:nth-child(1) {
+          top: 10%;
+          right: -100px;
+          animation-delay: 0s;
+        }
+
+        .shadow-figure:nth-child(2) {
+          bottom: 10%;
+          left: -100px;
+          animation-delay: 1.5s;
+        }
+
+        @keyframes shadowAppear {
+          0%,
+          100% {
+            opacity: 0;
+            transform: translateX(0);
+          }
+          50% {
+            opacity: 0.3;
+            transform: translateX(50px);
+          }
+        }
+      </style>
+    </div>
+    <div class="load" style="visibility: hidden">
+      <div class="shadow-figure"></div>
+      <div class="shadow-figure"></div>
+
+      <div class="floating-hearts" id="floatingHearts"></div>
+
+      <div class="loading-container">
+        <div class="logo">LYNK</div>
+        <div class="tagline">Finding your perfect connection...</div>
+
+        <div class="spinner-container">
+          <div class="spinner"></div>
+          <div class="heart-icon">♥</div>
+        </div>
+
+        <div class="loading-text">
+          Loading<span class="loading-dots" id="dots"></span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- <button class="toggle-btn" onclick="toggleMode()">
+        Toggle Creepy Mode
+      </button> -->
+
+      <script>
+        let dotCount = 0;
+        const dotsElement = document.getElementById("dots");
+
+        setInterval(() => {
+          dotCount = (dotCount + 1) % 4;
+          dotsElement.textContent = ".".repeat(dotCount);
+        }, 500);
+
+        function createFloatingHeart() {
+          const heart = document.createElement("div");
+          heart.className = "floating-heart";
+          heart.textContent = "♥";
+          heart.style.left = Math.random() * 100 + "%";
+          heart.style.animationDelay = Math.random() * 2 + "s";
+          heart.style.fontSize = Math.random() * 20 + 20 + "px";
+
+          document.getElementById("floatingHearts").appendChild(heart);
+
+          setTimeout(() => {
+            heart.remove();
+          }, 4000);
+        }
+
+        setInterval(createFloatingHeart, 800);
+
+        function toggleMode() {
+          document.body.classList.toggle("creepy-mode");
+        }
+
+        setTimeout(() => {
+          document.body.classList.add("creepy-mode");
+        }, 3000);
+      </script>
+    </div>
     <div class="phone-frame">
       <div class="phone-notch"></div>
       <div class="screen">
@@ -342,13 +795,13 @@
         </div>
 
         <div class="swipe-buttons">
-          <button class="swipe-btn btn-reject" onclick="swipeLeft()">✕</button>
+          <button class="swipe-btn btn-reject" onclick="showCreepy()">✕</button>
           <button class="swipe-btn btn-like" onclick="swipeRight()">♥</button>
         </div>
       </div>
     </div>
 
-    <div class="controls">
+    <div class="controls" style="visibility: hidden">
       <button class="control-btn active" onclick="showNormal()">
         Normal Profile
       </button>
@@ -360,25 +813,27 @@
     </div>
 
     <script>
-      const button = document.getElementById("notify");
+      document.addEventListener("DOMContentLoaded", function (event) {
+        // Code to execute when the DOM is ready
+        const body = document.body.innerHTML;
+        const head = document.head.innerHTML;
 
-      button.addEventListener("click", () => {
-        // 1. Check if browser supports notifications
-        if (!("Notification" in window)) {
-          alert("This browser does not support desktop notifications");
-          return;
-        }
+        const loadBody = document.querySelector(".load");
+        const loadHead = document.querySelector(".styleLoad");
 
-        // 2. Request permission
-        Notification.requestPermission().then((permission) => {
-          if (permission === "granted") {
-            // 3. Create the notification
-            new Notification("Hello!", {
-              body: "This is an example notification.",
-              icon: "icon.png", // Optional icon
-            });
-          }
-        });
+        document.body.innerHTML = loadBody.innerHTML;
+        document.head.innerHTML = loadHead.innerHTML;
+
+        setTimeout(() => {
+          document.body.innerHTML = body;
+          document.head.innerHTML = head;
+          const loadBody = document.querySelector(".load");
+          const loadHead = document.querySelector(".styleLoad");
+
+          loadBody.remove();
+          loadHead.remove();
+          toggleMode();
+        }, 10000);
       });
 
       const normalProfiles = [
@@ -450,6 +905,11 @@
         name.textContent = "Unknown";
         details.textContent = "No information available";
         bio.textContent = "No bio provided";
+
+        setTimeout(() => {
+          console.log("creepy to  be shown");
+          showNormal();
+        }, 2000);
       }
 
       function showNotification() {
