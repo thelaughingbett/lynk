@@ -74,81 +74,35 @@
         opacity: 0.9;
       }
 
-      .cards-container {
-        position: absolute;
-        top: 140px;
-        left: 0;
-        right: 0;
-        bottom: 120px;
-        padding: 0 20px;
-      }
-
       .profile-card {
         position: absolute;
-        top: 0;
+        top: 140px;
         left: 20px;
         right: 20px;
         background: white;
         border-radius: 20px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
         overflow: hidden;
-        cursor: grab;
-        user-select: none;
-        touch-action: none;
-        transition: transform 0.1s ease-out;
-      }
-
-      .profile-card:active {
-        cursor: grabbing;
-      }
-
-      .profile-card.swiping {
-        transition: none;
-      }
-
-      .profile-card.swiped-left {
-        animation: swipeLeft 0.4s ease-out forwards;
-      }
-
-      .profile-card.swiped-right {
-        animation: swipeRight 0.4s ease-out forwards;
-      }
-
-      @keyframes swipeLeft {
-        to {
-          transform: translateX(-500px) rotate(-30deg);
-          opacity: 0;
-        }
-      }
-
-      @keyframes swipeRight {
-        to {
-          transform: translateX(500px) rotate(30deg);
-          opacity: 0;
-        }
+        transition: transform 0.3s ease;
       }
 
       .profile-card.creepy {
         animation: glitch 0.3s infinite;
       }
 
-      .profile-card.creepy.swiping {
-        animation: none;
-      }
-
       @keyframes glitch {
         0%,
         100% {
-          filter: brightness(1);
+          transform: translate(0);
         }
         25% {
-          filter: brightness(0.7) hue-rotate(10deg);
+          transform: translate(-2px, 2px);
         }
         50% {
-          filter: brightness(1.3) hue-rotate(-10deg);
+          transform: translate(2px, -2px);
         }
         75% {
-          filter: brightness(0.8);
+          transform: translate(-2px, -2px);
         }
       }
 
@@ -157,7 +111,6 @@
         height: 400px;
         object-fit: cover;
         display: block;
-        pointer-events: none;
       }
 
       .profile-image.dark {
@@ -195,32 +148,6 @@
       .profile-bio.empty {
         color: #ccc;
         font-style: italic;
-      }
-
-      .swipe-indicator {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 80px;
-        font-weight: 900;
-        opacity: 0;
-        pointer-events: none;
-        text-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        transition: opacity 0.2s ease;
-      }
-
-      .swipe-indicator.left {
-        left: 40px;
-        color: #ff4458;
-      }
-
-      .swipe-indicator.right {
-        right: 40px;
-        color: #00d47e;
-      }
-
-      .swipe-indicator.visible {
-        opacity: 1;
       }
 
       .swipe-buttons {
@@ -308,6 +235,21 @@
         }
       }
 
+      .view-toggle {
+        position: absolute;
+        top: 120px;
+        right: 20px;
+        background: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #667eea;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+      }
+
       .match-badge {
         position: absolute;
         top: 20px;
@@ -338,35 +280,36 @@
         }
       }
 
-      .instructions {
+      .controls {
         position: fixed;
-        top: 20px;
+        bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 1000;
+      }
+
+      .control-btn {
         background: rgba(255, 255, 255, 0.95);
+        border: none;
         padding: 12px 24px;
         border-radius: 25px;
         font-size: 14px;
         font-weight: 600;
-        color: #667eea;
+        cursor: pointer;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        animation: fadeInOut 4s ease forwards;
+        transition: all 0.2s ease;
       }
 
-      @keyframes fadeInOut {
-        0% {
-          opacity: 0;
-        }
-        10% {
-          opacity: 1;
-        }
-        90% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0;
-        }
+      .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .control-btn.active {
+        background: #667eea;
+        color: white;
       }
     </style>
   </head>
@@ -826,8 +769,6 @@
         }, 3000);
       </script>
     </div>
-    <div class="instructions">👆 Swipe or drag cards left/right</div>
-
     <div class="phone-frame">
       <div class="phone-notch"></div>
       <div class="screen">
@@ -836,15 +777,41 @@
           <div class="tagline">Connect with your perfect match</div>
         </div>
 
-        <div class="cards-container" id="cardsContainer">
-          <!-- Cards will be dynamically added here -->
+        <div class="profile-card" id="profileCard">
+          <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop"
+            alt="Profile"
+            class="profile-image"
+            id="profileImage"
+          />
+          <div class="profile-info">
+            <div class="profile-name" id="profileName">Michael, 28</div>
+            <div class="profile-details" id="profileDetails">
+              Software Engineer • 5 km away
+            </div>
+            <div class="profile-bio" id="profileBio">
+              Love hiking, coffee, and good conversations. Looking for someone
+              genuine.
+            </div>
+          </div>
         </div>
 
         <div class="swipe-buttons">
-          <button class="swipe-btn btn-reject" id="rejectBtn">✕</button>
-          <button class="swipe-btn btn-like" id="likeBtn">♥</button>
+          <button class="swipe-btn btn-reject" onclick="showCreepy()">✕</button>
+          <button class="swipe-btn btn-like" onclick="swipeRight()">♥</button>
         </div>
       </div>
+    </div>
+
+    <div class="controls" style="visibility: hidden">
+      <button class="control-btn active" onclick="showNormal()">
+        Normal Profile
+      </button>
+      <button class="control-btn" onclick="showCreepy()">Creepy Profile</button>
+      <button class="control-btn" onclick="showNotification()">
+        Show Match
+      </button>
+      <button id="notify">Notify Me</button>
     </div>
 
     <script>
@@ -868,28 +835,16 @@
           loadBody.remove();
           loadHead.remove();
           toggleMode();
-          // Initialize first card
-          const firstCard = createCard(profiles[currentIndex]);
-          document.getElementById("cardsContainer").appendChild(firstCard);
-
-          // Add button event listeners
-          document
-            .getElementById("rejectBtn")
-            .addEventListener("click", swipeLeft);
-          document
-            .getElementById("likeBtn")
-            .addEventListener("click", swipeRight);
         }, 10000);
       });
 
-      const profiles = [
+      const normalProfiles = [
         {
           image:
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
           name: "Michael, 28",
           details: "Software Engineer • 5 km away",
           bio: "Love hiking, coffee, and good conversations. Looking for someone genuine.",
-          creepy: false,
         },
         {
           image:
@@ -897,228 +852,66 @@
           name: "David, 26",
           details: "Photographer • 3 km away",
           bio: "Capturing moments and creating memories. Adventure seeker and dog lover.",
-          creepy: false,
-        },
-        {
-          image:
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=500&fit=crop",
-          name: "James, 30",
-          details: "Entrepreneur • 8 km away",
-          bio: "Building dreams one day at a time. Love travel, food, and meaningful connections.",
-          creepy: false,
         },
       ];
 
-      const davidProfile = {
-        image:
-          "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
-        name: "David, 26",
-        details: "Photographer • 3 km away",
-        bio: "Capturing moments and creating memories. Adventure seeker and dog lover.",
-        creepy: false,
-      };
-
-      const davidCreepyVersions = [
-        {
-          image:
-            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
-          name: "David, 26",
-          details: "Still here • Closer than you think",
-          bio: "You can't ignore me forever, Talia...",
-          creepy: true,
-          message: "Why do you keep rejecting me?",
-        },
-        {
-          image:
-            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
-          name: "D̴a̷v̶i̸d̴",
-          details: "Always watching • 0 km away",
-          bio: "I'm not going anywhere. We're meant to be.",
-          creepy: true,
-          message: "You belong to me.",
-        },
-        {
-          image:
-            "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=400&h=500&fit=crop",
-          name: "Unknown",
-          details: "Behind you • Right now",
-          bio: "Stop running from us, Talia.",
-          creepy: true,
-          message: "There is no escape.",
-        },
-      ];
-
-      let currentIndex = 0;
+      let currentView = "normal";
       let swipeCount = 0;
-      let davidAppearances = 0;
-      let isDragging = false;
-      let startX = 0;
-      let currentX = 0;
-      let currentCard = null;
 
-      function createCard(profile) {
-        const card = document.createElement("div");
-        card.className = "profile-card" + (profile.creepy ? " creepy" : "");
-        card.innerHTML = `
-                <img src="${profile.image}" 
-                     alt="Profile" 
-                     class="profile-image ${profile.creepy ? "dark" : ""}">
-                <div class="profile-info">
-                    <div class="profile-name ${profile.creepy ? "unknown" : ""}">${profile.name}</div>
-                    <div class="profile-details">${profile.details}</div>
-                    <div class="profile-bio ${profile.creepy ? "empty" : ""}">${profile.bio}</div>
-                </div>
-                <div class="swipe-indicator left">NOPE</div>
-                <div class="swipe-indicator right">LIKE</div>
-            `;
+      function showNormal() {
+        currentView = "normal";
+        document
+          .querySelectorAll(".control-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
 
-        // Mouse events
-        card.addEventListener("mousedown", startDrag);
-        card.addEventListener("mousemove", drag);
-        card.addEventListener("mouseup", endDrag);
-        card.addEventListener("mouseleave", endDrag);
+        const profile =
+          normalProfiles[Math.floor(Math.random() * normalProfiles.length)];
+        const card = document.getElementById("profileCard");
+        const img = document.getElementById("profileImage");
+        const name = document.getElementById("profileName");
+        const details = document.getElementById("profileDetails");
+        const bio = document.getElementById("profileBio");
 
-        // Touch events
-        card.addEventListener("touchstart", startDrag);
-        card.addEventListener("touchmove", drag);
-        card.addEventListener("touchend", endDrag);
+        card.classList.remove("creepy");
+        img.classList.remove("dark");
+        name.classList.remove("unknown");
+        bio.classList.remove("empty");
 
-        return card;
+        img.src = profile.image;
+        name.textContent = profile.name;
+        details.textContent = profile.details;
+        bio.textContent = profile.bio;
       }
 
-      function startDrag(e) {
-        isDragging = true;
-        currentCard = e.currentTarget;
-        currentCard.classList.add("swiping");
+      function showCreepy() {
+        currentView = "creepy";
+        document
+          .querySelectorAll(".control-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
 
-        const clientX = e.type.includes("mouse")
-          ? e.clientX
-          : e.touches[0].clientX;
-        startX = clientX;
-      }
+        const card = document.getElementById("profileCard");
+        const img = document.getElementById("profileImage");
+        const name = document.getElementById("profileName");
+        const details = document.getElementById("profileDetails");
+        const bio = document.getElementById("profileBio");
 
-      function drag(e) {
-        if (!isDragging) return;
+        card.classList.add("creepy");
+        img.classList.add("dark");
+        name.classList.add("unknown");
+        bio.classList.add("empty");
 
-        const clientX = e.type.includes("mouse")
-          ? e.clientX
-          : e.touches[0].clientX;
-        currentX = clientX - startX;
-
-        const rotation = currentX / 20;
-        currentCard.style.transform = `translateX(${currentX}px) rotate(${rotation}deg)`;
-
-        const leftIndicator = currentCard.querySelector(
-          ".swipe-indicator.left",
-        );
-        const rightIndicator = currentCard.querySelector(
-          ".swipe-indicator.right",
-        );
-
-        if (currentX < -50) {
-          leftIndicator.classList.add("visible");
-          rightIndicator.classList.remove("visible");
-        } else if (currentX > 50) {
-          rightIndicator.classList.add("visible");
-          leftIndicator.classList.remove("visible");
-        } else {
-          leftIndicator.classList.remove("visible");
-          rightIndicator.classList.remove("visible");
-        }
-      }
-
-      function endDrag(e) {
-        if (!isDragging) return;
-        isDragging = false;
-
-        currentCard.classList.remove("swiping");
-
-        if (Math.abs(currentX) > 100) {
-          if (currentX < 0) {
-            performSwipeLeft();
-          } else {
-            performSwipeRight();
-          }
-        } else {
-          currentCard.style.transform = "";
-          currentCard
-            .querySelector(".swipe-indicator.left")
-            .classList.remove("visible");
-          currentCard
-            .querySelector(".swipe-indicator.right")
-            .classList.remove("visible");
-        }
-
-        currentX = 0;
-      }
-
-      function performSwipeLeft() {
-        currentCard.classList.add("swiped-left");
-        swipeCount++;
+        img.src =
+          "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=400&h=500&fit=crop";
+        name.textContent = "Unknown";
+        details.textContent = "No information available";
+        bio.textContent = "No bio provided";
 
         setTimeout(() => {
-          currentCard.remove();
-          loadNextCard();
-        }, 400);
-      }
-
-      function performSwipeRight() {
-        currentCard.classList.add("swiped-right");
-
-        showNotification();
-
-        setTimeout(() => {
-          currentCard.remove();
-          loadNextCard();
-        }, 400);
-      }
-
-      function loadNextCard() {
-        // Every 2 swipes, David comes back more creepy
-        if (swipeCount % 2 === 0 && swipeCount > 0) {
-          const davidVersion =
-            davidAppearances < davidCreepyVersions.length
-              ? davidCreepyVersions[davidAppearances]
-              : davidCreepyVersions[davidCreepyVersions.length - 1];
-
-          const card = createCard(davidVersion);
-          document.getElementById("cardsContainer").appendChild(card);
-
-          setTimeout(() => {
-            const notification = document.createElement("div");
-            notification.className = "notification creepy";
-            notification.textContent = davidVersion.message;
-            document.querySelector(".screen").appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-          }, 500);
-
-          davidAppearances++;
-        } else if (currentIndex < profiles.length - 1) {
-          currentIndex++;
-          const card = createCard(profiles[currentIndex]);
-          document.getElementById("cardsContainer").appendChild(card);
-        } else {
-          // Cycle back through profiles
-          currentIndex = 0;
-          const card = createCard(profiles[currentIndex]);
-          document.getElementById("cardsContainer").appendChild(card);
-        }
-      }
-
-      function swipeLeft() {
-        const card = document.querySelector(".profile-card");
-        if (card) {
-          currentCard = card;
-          performSwipeLeft();
-        }
-      }
-
-      function swipeRight() {
-        const card = document.querySelector(".profile-card");
-        if (card) {
-          currentCard = card;
-          performSwipeRight();
-        }
+          console.log("creepy to  be shown");
+          showNormal();
+        }, 2000);
       }
 
       function showNotification() {
@@ -1130,13 +923,59 @@
 
         const badge = document.createElement("div");
         badge.className = "match-badge";
-        badge.textContent = "It's a Match! 💕";
+        badge.textContent = "It's a Match! 💀";
         document.querySelector(".screen").appendChild(badge);
 
         setTimeout(() => {
           notification.remove();
           badge.remove();
         }, 3000);
+      }
+
+      function swipeLeft() {
+        const card = document.getElementById("profileCard");
+        card.style.transform = "translateX(-500px) rotate(-30deg)";
+        card.style.opacity = "0";
+
+        setTimeout(() => {
+          card.style.transition = "none";
+          card.style.transform = "translateX(0) rotate(0)";
+          card.style.opacity = "1";
+
+          setTimeout(() => {
+            card.style.transition = "transform 0.3s ease";
+
+            swipeCount++;
+            if (swipeCount >= 3 && currentView === "normal") {
+              showCreepy();
+              setTimeout(() => {
+                const notification = document.createElement("div");
+                notification.className = "notification creepy";
+                notification.textContent = "Are you dumping me already?";
+                document.querySelector(".screen").appendChild(notification);
+                setTimeout(() => notification.remove(), 3000);
+              }, 500);
+            } else if (currentView === "normal") {
+              showNormal();
+            }
+          }, 50);
+        }, 300);
+      }
+
+      function swipeRight() {
+        const card = document.getElementById("profileCard");
+        card.style.transform = "translateX(500px) rotate(30deg)";
+        card.style.opacity = "0";
+
+        setTimeout(() => {
+          showNotification();
+          card.style.transition = "none";
+          card.style.transform = "translateX(0) rotate(0)";
+          card.style.opacity = "1";
+          setTimeout(() => {
+            card.style.transition = "transform 0.3s ease";
+          }, 50);
+        }, 300);
       }
     </script>
   </body>
